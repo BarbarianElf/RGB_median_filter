@@ -23,7 +23,7 @@ quit -sim
 set altera_list [list "C:\\intelFPGA_lite\\19.1\\quartus\\eda\\sim_lib\\altera_mf_components.vhd" "C:\\intelFPGA_lite\\19.1\\quartus\\eda\\sim_lib\\altera_mf.vhd"]
 
 # project ordered file list 
-set file_list [list "project_package.vhd" "generic_rom.vhd" "generic_ram.vhd" "fsm.vhd" "counter_ena.vhd" "control_unit.vhd" "buffer_reg.vhd" "median_filter.vhd" "filter_image.vhd" "filter_image_tb.vhd"]
+set file_list [list "project_package.vhd" "generic_rom.vhd" "generic_ram.vhd" "fsm.vhd" "counter_ena.vhd" "control_unit.vhd" "buffer_reg.vhd" "median_filter.vhd" "logic_unit.vhd" "filter_image.vhd" "filter_image_tb.vhd"]
 
 # your project top level
 set top_level filter_image_tb

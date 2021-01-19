@@ -2,7 +2,7 @@ all the test folder included do files
 
 open modelsim
 go to the desired folder to simulate
-run do test_file.do (dp file name respectively to the folder name)
+run do test_file.do (do file name respectively to the folder name)
 
 TOP LEVEL PROJECT: test_filter_image
 open modelsim

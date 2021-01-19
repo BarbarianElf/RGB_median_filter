@@ -32,14 +32,11 @@ end entity filter_image;
 architecture filter_image of filter_image is
 	signal read_address_rom, write_address_ram : std_logic_vector(log2(picture_h)-1 downto 0);
 	signal rom_out, ram_in : mem_vec(2 downto 0);
-	
-	signal new_row, filtered_row : PIXEL(picture_w-1 downto 0);
-	signal prev_row, curr_row, next_row : PIXEL(picture_w+1 downto 0);
 	signal write_ena : std_logic;
 	signal push      : std_logic;
 	
 begin
-	fsm_unit: entity work.CONTROL_UNIT
+	control_unit: entity work.CONTROL_UNIT
 	port map (
 			  start         => start,
 			  clk           => clk,
@@ -49,6 +46,15 @@ begin
 			  write_ena     => write_ena,
 			  push          => push,
 			  done          => done
+			);
+	
+	logic_unit: entity work.logic_UNIT
+	port map (
+			  rom_out       => rom_out,
+			  push          => push,
+			  clk           => clk,
+			  rst           => rst,
+			  ram_in        => ram_in
 			);
 			
 	rom_loop: for i in rom_out'range generate
@@ -66,26 +72,7 @@ begin
 				 q       => rom_out(i)
 				);
 	end generate rom_loop;
-	
-	buffer_row :entity work.buffer_reg
-	port map (
-			  new_row  => new_row,
-			  ena      => push,
-			  clk      => clk,
-			  rst      => rst,
-			  prev_row => prev_row,
-			  curr_row => curr_row,
-			  next_row => next_row
-			);
-	
-	median: entity work.median_filter
-		port map (
-				  prev_row     => prev_row,
-				  curr_row     => curr_row,
-				  next_row     => next_row,
-				  filtered_row => filtered_row
-				);
-	
+
 	ram_loop: for i in ram_in'range generate
 		ram: entity work.generic_ram
 		generic map(
@@ -103,15 +90,5 @@ begin
 				 q       => OPEN
 				);
 	end generate ram_loop;
-	
-	p1: process (rom_out) is
-	begin
-		new_row <= mem_vec2PIXEL(rom_out);
-	end process p1;
-	
-	p2: process (filtered_row) is
-	begin
-		ram_in <= PIXEL2mem_vec(filtered_row);
-	end process p2;
 
 end architecture filter_image;
